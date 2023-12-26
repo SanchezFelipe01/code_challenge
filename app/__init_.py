@@ -73,30 +73,13 @@ def delete_all_employees():
 # Ruta de Flask para mostrar empleados con condiciones complejas
 @app.route('/recruitments')
 def get_quarterly_recruitments():
-    try:
-        departments = pd.read_sql_table(Department.__tablename__, db.engine)
-        jobs = pd.read_sql_table(Job.__tablename__, db.engine)
-        employees = pd.read_sql_table(Employee.__tablename__, db.engine)
+    return helpers.recruitments_by_quarter(db, Department, Job, Employee)
 
-        result = helpers.recruitments_by_quarter(employees, departments, jobs)
-
-        return render_template('result.html', result=result, title='Recruitments per quarter')
-
-    except Exception as e:
-        return f'Error al mostrar empleados: {str(e)}'
     
 
 @app.route('/people_by_departments')
 def get_people_by_departments():
-    try:
-        departments = pd.read_sql_table(Department.__tablename__, db.engine)
-        employees = pd.read_sql_table(Employee.__tablename__, db.engine)
-        result = helpers.people_by_department(employees, departments)
-
-        return render_template('result.html', result=result, title='People by department')
-
-    except Exception as e:
-        return f'Error al mostrar empleadosssss: {str(e)}'
+    return helpers.people_by_department(db, Department, Employee)
 
 
 if __name__ == '__main__':

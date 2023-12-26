@@ -43,6 +43,15 @@
             padding-top: 20px;
             margin-top: 20px;
         }
+        .message-container {
+            position: fixed;
+            top: 0;
+            right: 0;
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -53,22 +62,22 @@
     <h3>Departments</h3>
     <ul>
         <li><a href="/get_all_departments">Departments list</a></li>
-        <li><a href="/import_departments_csv">Import Departments</a></li>
-        <li><a href="/delete_all_departments">Delete Departments</a></li>
+        <li><a href="#" onclick="get_message('/import_departments_csv'); return false;">Import Departments</a></li>
+        <li><a href="#" onclick="get_message('/delete_all_departments'); return false;">Delete Departments</a></li>
     </ul>
 
     <h3>Jobs</h3>
     <ul>
         <li><a href="/get_all_jobs">Jobs list</a></li>
-        <li><a href="/import_jobs_csv">Import Jobs</a></li>
-        <li><a href="/delete_all_jobs">Delete Jobs</a></li>
+        <li><a href="#" onclick="get_message('/import_jobs_csv'); return false;">Import Jobs</li>
+        <li><a href="#" onclick="get_message('/delete_all_jobs'); return false;">Delete Jobs</a></li>
     </ul>
 
     <h3>Employees</h3>
     <ul>
         <li><a href="/get_all_employees">Employees list</a></li>
-        <li><a href="/import_employees_csv">Import Employees</a></li>
-        <li><a href="/delete_all_employees">Delete Employees</a></li>
+        <li><a href="#" onclick="get_message('/import_employees_csv'); return false;">Import Employees</a></li>
+        <li><a href="#" onclick="get_message('/delete_all_employees'); return false;">Delete Employees</a></li>
     </ul>
 
     <p></p>
@@ -78,6 +87,30 @@
         <li><a href="/recruitments">Recruitments per quarter</a></li>
         <li><a href="/people_by_departments">People by department</a></li>
     </ul>
-
+    <div class="message-container" id="messageContainer"></div>
+    <script>
+        function get_message(path) {
+            fetch(path)
+                .then(response => response.json())
+                .then(data => {
+                    showMessage(data.message);
+                })
+                .catch(error => {
+                    showMessage('Error.');
+                });
+        }
+    
+        function showMessage(message) {
+            var messageContainer = document.getElementById('messageContainer');
+            messageContainer.innerHTML = message;
+            messageContainer.style.display = 'block';
+    
+            // Hide the message after 3 seconds (adjust as needed)
+            setTimeout(function() {
+                messageContainer.style.display = 'none';
+            }, 3000);
+        }
+    </script>
 </body>
+
 </html>
