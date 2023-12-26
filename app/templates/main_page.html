@@ -1,0 +1,83 @@
+<!-- templates/main_page.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            background-color: #f8f8f8;
+        }
+
+        h1, h2, h3 {
+            color: #333;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        h2 {
+            border-top: 2px solid #007BFF;
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Main Page</h1>
+
+    <h2>Section 1: API</h2>
+    <h3>Departments</h3>
+    <ul>
+        <li><a href="/get_all_departments">Departments list</a></li>
+        <li><a href="/import_departments_csv">Import Departments</a></li>
+        <li><a href="/delete_all_departments">Delete Departments</a></li>
+    </ul>
+
+    <h3>Jobs</h3>
+    <ul>
+        <li><a href="/get_all_jobs">Jobs list</a></li>
+        <li><a href="/import_jobs_csv">Import Jobs</a></li>
+        <li><a href="/delete_all_jobs">Delete Jobs</a></li>
+    </ul>
+
+    <h3>Employees</h3>
+    <ul>
+        <li><a href="/get_all_employees">Employees list</a></li>
+        <li><a href="/import_employees_csv">Import Employees</a></li>
+        <li><a href="/delete_all_employees">Delete Employees</a></li>
+    </ul>
+
+    <p></p>
+
+    <h2>Section 2: SQL</h2>
+    <ul>
+        <li><a href="/recruitments">Recruitments per quarter</a></li>
+        <li><a href="/people_by_departments">People by department</a></li>
+    </ul>
+
+</body>
+</html>
