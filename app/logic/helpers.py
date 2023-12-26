@@ -2,6 +2,8 @@ import pandas as pd
 from sqlalchemy import inspect
 import csv
 from flask import render_template, jsonify
+from sqlalchemy.sql import or_
+
 
 ### CRUD Operations ###
 
@@ -50,6 +52,7 @@ def get_all_departments(Department):
         return f"""Error while getting the records: {str(e)}
                     <p><a href="/">Go to Main Page</a></p>
                 """
+                
     
 def delete_all_departments(db, Department):
 
@@ -182,12 +185,29 @@ def import_employees_csv(db, Employee, csv_employees_path):
 def get_all_employees(Employee):
     try:
         employees = Employee.query.all()
-        return render_template('employees.html', employees=employees)
+        return render_template('employees.html', employees=employees, title='Hired employees')
     except Exception as e:
         return f"""Error while getting the records: {str(e)}
                      <p><a href="/">Go to Main Page</a></p>
                 """
-    
+
+def get_employees_with_missing_info(Employee):
+    try:
+        employees = Employee.query.filter(
+            or_(
+                Employee.name.is_(None),
+                Employee.datetime.is_(None),
+                Employee.department_id.is_(None),
+                Employee.job_id.is_(None),
+            )
+        ).all()
+        return render_template('employees.html', employees=employees, title='Employees with missing information')
+    except Exception as e:
+        return f"""Error while getting the records: {str(e)}
+                     <p><a href="/">Go to Main Page</a></p>
+                """
+
+
 def delete_all_employees(db, Employee):
     
     message = ""
@@ -313,17 +333,59 @@ def people_by_department(db, Department, Employee):
 
 # REQUIREMENT 2
 
+def people_with_missing_data(db, Employee):
+
+    columns = ['id', 'department', 'datetime']
+    df = pd.DataFrame(columns=columns)
+
+    try:
+
+        departments = pd.read_sql_table(Department.__tablename__, db.engine)
+        hired_employees = pd.read_sql_table(Employee.__tablename__, db.engine)
+
+        if hired_employees.empty or departments.empty:
+            columns = ['id', 'department', 'hired']
+            df = pd.DataFrame(columns=columns)
+            return render_template('result.html', result=df, title='People by department')
+
+        hired_employees['datetime'] = pd.to_datetime(hired_employees['datetime'])
+        hired_employees_2021 = hired_employees[hired_employees['datetime'].dt.year == 2021]
+
+        merged_df = pd.merge(
+            hired_employees_2021, 
+            departments, 
+            left_on='department_id', 
+            right_on='id')
+
+        merge2 = (
+            merged_df.groupby(['id_y', 'department'])
+                .size().reset_index(name='hired')
+        )
+        
+        avg_num_employees_hired = merge2['hired'].mean()
+
+        people_by_department_df = merge2[merge2['hired'] > avg_num_employees_hired]
+
+        people_by_department_df = (
+            people_by_department_df.sort_values(by='hired', ascending=False)
+                .reset_index(drop=True)
+        )
+
+        people_by_department_df.rename(columns={'id_y': 'id'}, inplace=True)
+        people_by_department_df.index = people_by_department_df.index +1
+        return render_template('result.html', result=people_by_department_df, title='People by department')
+
+    except Exception:
+        df.loc[0] = 'Error'
+        return render_template('result.html', result=df, title='People by department')
+
 ### QUERIES ###
 
 
 ### AUX FUNCTIONS ###
 
 def record_exists_by_id(session, model, record_id):
-    # Obtener el modelo de la tabla correspondiente
     table_model = session.get(model, record_id)
-
-    # Verificar si se obtuvo algún resultado
     return table_model is not None
-
 
 ### AUX FUNCTIONS ###

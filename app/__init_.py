@@ -32,7 +32,7 @@ def import_departments_csv():
 @app.route('/get_all_departments')
 def get_all_departments():
     return helpers.get_all_departments(Department)
-    
+
 
 @app.route('/delete_all_departments')
 def delete_all_departments():
@@ -65,12 +65,15 @@ def import_employees_csv():
 def get_all_employees():
     return helpers.get_all_employees(Employee)
 
+@app.route('/get_employees_missing_info')
+def get_employees_with_missing_info():
+    return helpers.get_employees_with_missing_info(Employee)
+
 @app.route('/delete_all_employees')
 def delete_all_employees():
     return helpers.delete_all_employees(db, Employee)
 
 
-# Ruta de Flask para mostrar empleados con condiciones complejas
 @app.route('/recruitments')
 def get_quarterly_recruitments():
     return helpers.recruitments_by_quarter(db, Department, Job, Employee)

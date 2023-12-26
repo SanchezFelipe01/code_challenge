@@ -76,6 +76,7 @@
     <h3>Employees</h3>
     <ul>
         <li><a href="/get_all_employees">Employees list</a></li>
+        <li><a href="/get_employees_missing_info">Employees with missing information</a></li>
         <li><a href="#" onclick="get_message('/import_employees_csv'); return false;">Import Employees</a></li>
         <li><a href="#" onclick="get_message('/delete_all_employees'); return false;">Delete Employees</a></li>
     </ul>
@@ -105,7 +106,6 @@
             messageContainer.innerHTML = message;
             messageContainer.style.display = 'block';
     
-            // Hide the message after 3 seconds (adjust as needed)
             setTimeout(function() {
                 messageContainer.style.display = 'none';
             }, 3000);
