@@ -48,10 +48,8 @@ def get_all_departments(Department):
     try:
         departments = Department.query.all()
         return render_template('departments.html', departments=departments)
-    except Exception as e:
-        return f"""Error while getting the records: {str(e)}
-                    <p><a href="/">Go to Main Page</a></p>
-                """
+    except Exception:
+        return render_template('departments.html')
                 
     
 def delete_all_departments(db, Department):
@@ -116,9 +114,7 @@ def get_all_jobs(Job):
         
         return render_template('jobs.html', jobs=jobs)
     except Exception as e:
-        return f"""Error while getting the records: {str(e)}
-                 <p><a href="/">Go to Main Page</a></p>
-                 """
+        return render_template('jobs.html')
     
 def delete_all_jobs(db, Job):
     
@@ -187,9 +183,7 @@ def get_all_employees(Employee):
         employees = Employee.query.all()
         return render_template('employees.html', employees=employees, title='Hired employees')
     except Exception as e:
-        return f"""Error while getting the records: {str(e)}
-                     <p><a href="/">Go to Main Page</a></p>
-                """
+        return render_template('employees.html', title='Hired employees')
 
 def get_employees_with_missing_info(Employee):
     try:
@@ -203,9 +197,7 @@ def get_employees_with_missing_info(Employee):
         ).all()
         return render_template('employees.html', employees=employees, title='Employees with missing information')
     except Exception as e:
-        return f"""Error while getting the records: {str(e)}
-                     <p><a href="/">Go to Main Page</a></p>
-                """
+        return render_template('employees.html', title='Employees with missing information')
 
 
 def delete_all_employees(db, Employee):
